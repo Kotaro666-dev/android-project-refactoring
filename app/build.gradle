@@ -7,6 +7,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile rootProject.file('jp.co.yumemi.android.codecheck.jks')
+            storePassword 'yumemi'
+            keyAlias 'app_key'
+            keyPassword 'yumemi'
+        }
+    }
     compileSdk 31
 
     defaultConfig {
@@ -21,7 +29,10 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            applicationIdSuffix ".release"
             minifyEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
