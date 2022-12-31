@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/oneFragment">
+    app:startDestination="@id/fragment_search_screen">
 
     <fragment
-        android:id="@+id/oneFragment"
-        android:name="jp.co.yumemi.android.code_check.OneFragment"
+        android:id="@+id/fragment_search_screen"
+        android:name="jp.co.yumemi.android.code_check.SearchScreenFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_one">
+        tools:layout="@layout/fragment_search_screen">
         <action
             android:id="@+id/action_repositoriesFragment_to_repositoryFragment"
             app:destination="@id/twoFragment" />
