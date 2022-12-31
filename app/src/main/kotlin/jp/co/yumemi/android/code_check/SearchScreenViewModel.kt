@@ -20,7 +20,7 @@ import org.json.JSONObject
 import java.util.*
 
 /**
- * TwoFragment で使う
+ *  SearchResultsDetailScreenFragment で使う
  */
 class SearchScreenViewModel(
     val context: Context
