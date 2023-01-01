@@ -59,7 +59,7 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
     }
 }
 
-val diff_util = object : DiffUtil.ItemCallback<item>() {
+val diffCallback = object : DiffUtil.ItemCallback<item>() {
     override fun areItemsTheSame(oldItem: item, newItem: item): Boolean {
         return oldItem.name == newItem.name
     }
@@ -72,7 +72,7 @@ val diff_util = object : DiffUtil.ItemCallback<item>() {
 
 class CustomAdapter(
     private val itemClickListener: OnItemClickListener,
-) : ListAdapter<item, CustomAdapter.ViewHolder>(diff_util) {
+) : ListAdapter<item, CustomAdapter.ViewHolder>(diffCallback) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
