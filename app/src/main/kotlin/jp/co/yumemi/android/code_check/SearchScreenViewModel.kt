@@ -12,65 +12,75 @@ import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.MainActivity.Companion.lastSearchDate
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kotlinx.parcelize.Parcelize
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+
+const val GITHUB_SEARCH_API_ENDPOINT = "https://api.github.com/search/repositories"
+const val GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE = "application/vnd.github.v3+json"
 
 class SearchScreenViewModel(
     val context: Context
 ) : ViewModel() {
+    private val client = HttpClient(Android)
 
-    // TODO: 複数のタスクを一つのメソッドで行っている
-    // TODO: 1. API リクエストする
-    // TODO: 2. 取得したデータのうち、必要なフィールドを抽出している
-    // TODO: 3. 返却するデータのリストを生成する
     fun searchGithubRepositories(searchKeyword: String): List<GithubRepository> = runBlocking {
-        val client = HttpClient(Android)
+        return@runBlocking withContext(Dispatchers.IO) {
+            val response = requestGithubRepositories(searchKeyword)
+            // TODO: レスポンスエラーチェックする
+            val jsonItems = parseResponseBody(response)
+            val githubRepositories = createGithubRepositoryList(jsonItems)
+            setLastSearchDate()
+            return@withContext githubRepositories
+        }
+    }
 
-        return@runBlocking GlobalScope.async {
-            val response: HttpResponse = client?.get("https://api.github.com/search/repositories") {
-                header("Accept", "application/vnd.github.v3+json")
-                parameter("q", searchKeyword)
-            }
+    private suspend fun requestGithubRepositories(searchKeyword: String): HttpResponse {
+        return client.get(GITHUB_SEARCH_API_ENDPOINT) {
+            header("Accept", GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE)
+            parameter("q", searchKeyword)
+        }
+    }
 
-            val jsonBody = JSONObject(response.receive<String>())
+    private suspend fun parseResponseBody(response: HttpResponse): JSONArray {
+        // TODO: 例外発生する可能性あり
+        val jsonBody = JSONObject(response.receive<String>())
+        return jsonBody.optJSONArray("items")!!
+    }
 
-            val jsonItems = jsonBody.optJSONArray("items")!!
+    private fun extractGithubRepositoryData(jsonItem: JSONObject): GithubRepository {
+        val name = jsonItem.optString("full_name")
+        val ownerIconUrl = jsonItem.optJSONObject("owner")!!.optString("avatar_url")
+        val language = jsonItem.optString("language")
+        val stargazersCount = jsonItem.optLong("stargazers_count")
+        val watchersCount = jsonItem.optLong("watchers_count")
+        val forksCount = jsonItem.optLong("forks_conut")
+        val openIssuesCount = jsonItem.optLong("open_issues_count")
+        return GithubRepository(
+            name = name,
+            ownerIconUrl = ownerIconUrl,
+            language = context.getString(R.string.written_language, language),
+            stargazersCount = stargazersCount,
+            watchersCount = watchersCount,
+            forksCount = forksCount,
+            openIssuesCount = openIssuesCount
+        )
+    }
 
-            val githubRepositories = mutableListOf<GithubRepository>()
+    private fun createGithubRepositoryList(jsonItems: JSONArray): List<GithubRepository> {
+        val githubRepositories = mutableListOf<GithubRepository>()
+        for (i in 0 until jsonItems.length()) {
+            val jsonItem = jsonItems.optJSONObject(i)!!
+            val githubRepository = extractGithubRepositoryData(jsonItem)
+            githubRepositories.add(githubRepository)
+        }
+        return githubRepositories.toList()
+    }
 
-            for (i in 0 until jsonItems.length()) {
-
-                // TODO: 抽出してデータクラスのインスタンスを生成する作業をメソッド化して、処理内容を明らかにする
-                val jsonItem = jsonItems.optJSONObject(i)!!
-                val name = jsonItem.optString("full_name")
-                val ownerIconUrl = jsonItem.optJSONObject("owner")!!.optString("avatar_url")
-                val language = jsonItem.optString("language")
-                val stargazersCount = jsonItem.optLong("stargazers_count")
-                val watchersCount = jsonItem.optLong("watchers_count")
-                val forksCount = jsonItem.optLong("forks_conut")
-                val openIssuesCount = jsonItem.optLong("open_issues_count")
-
-                githubRepositories.add(
-                    GithubRepository(
-                        name = name,
-                        ownerIconUrl = ownerIconUrl,
-                        language = context.getString(R.string.written_language, language),
-                        stargazersCount = stargazersCount,
-                        watchersCount = watchersCount,
-                        forksCount = forksCount,
-                        openIssuesCount = openIssuesCount
-                    )
-                )
-            }
-
-            lastSearchDate = Date()
-
-            return@async githubRepositories.toList()
-        }.await()
+    private fun setLastSearchDate() {
+        lastSearchDate = Date()
     }
 }
 
