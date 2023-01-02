@@ -21,7 +21,7 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
         val context = requireContext()
 
         val binding = FragmentSearchScreenBinding.bind(view)
-        val viewModel = SearchScreenViewModel(context)
+        val viewModel = SearchScreenViewModel()
 
         val layoutManager = LinearLayoutManager(context)
         val dividerItemDecoration =
