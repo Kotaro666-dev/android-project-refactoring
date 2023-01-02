@@ -18,14 +18,14 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val context = requireContext()
 
         val binding = FragmentSearchScreenBinding.bind(view)
+        val viewModel = SearchScreenViewModel()
 
-        val viewModel = SearchScreenViewModel(context!!)
-
-        val layoutManager = LinearLayoutManager(context!!)
+        val layoutManager = LinearLayoutManager(context)
         val dividerItemDecoration =
-            DividerItemDecoration(context!!, layoutManager.orientation)
+            DividerItemDecoration(context, layoutManager.orientation)
         val adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
             override fun itemClick(item: GithubRepository) {
                 gotoRepositoryFragment(item)
