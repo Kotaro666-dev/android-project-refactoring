@@ -10,9 +10,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
 import jp.co.yumemi.android.code_check.databinding.FragmentSearchScreenBinding
+import kotlinx.coroutines.launch
 
 class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
 
@@ -39,8 +41,8 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
                     return@setOnEditorActionListener false
                 }
                 val searchKeyword = searchInput.text.toString()
-                viewModel.searchGithubRepositories(searchKeyword).apply {
-                    adapter.submitList(this)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.searchGithubRepositories(searchKeyword)
                 }
                 return@setOnEditorActionListener true
             }
@@ -50,6 +52,10 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
             it.addItemDecoration(dividerItemDecoration)
             it.adapter = adapter
         }
+
+        viewModel.githubRepositories.observe(viewLifecycleOwner, {
+            adapter.submitList(it)
+        })
     }
 
     private fun navigateToSearchResultsDetailScreen(item: GithubRepository) {
