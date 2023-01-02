@@ -22,12 +22,12 @@ class SearchResultsDetailScreenFragment : Fragment(R.layout.fragment_search_resu
 
         val githubRepository = args.githubRepository
 
-        binding.ownerIconView.load(githubRepository.ownerIconUrl);
-        binding.nameView.text = githubRepository.name;
-        binding.languageView.text = githubRepository.language;
-        binding.starsView.text = "${githubRepository.stargazersCount} stars";
-        binding.watchersView.text = "${githubRepository.watchersCount} watchers";
-        binding.forksView.text = "${githubRepository.forksCount} forks";
-        binding.openIssuesView.text = "${githubRepository.openIssuesCount} open issues";
+        binding.ownerIconView.load(githubRepository.ownerIconUrl)
+        binding.nameView.text = githubRepository.name
+        binding.languageView.text = githubRepository.language
+        binding.starsView.text = "${githubRepository.stargazersCount} stars"
+        binding.watchersView.text = "${githubRepository.watchersCount} watchers"
+        binding.forksView.text = "${githubRepository.forksCount} forks"
+        binding.openIssuesView.text = "${githubRepository.openIssuesCount} open issues"
     }
 }
