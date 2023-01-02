@@ -27,7 +27,11 @@ class SearchScreenViewModel(
 ) : ViewModel() {
 
     // 検索結果
-    fun searchResults(inputText: String): List<GithubRepository> = runBlocking {
+    // TODO: 複数のタスクを一つのメソッドで行っている
+    // TODO: 1. API リクエストする
+    // TODO: 2. 取得したデータのうち、必要なフィールドを抽出している
+    // TODO: 3. 返却するデータのリストを生成する
+    fun searchGithubRepositories(inputText: String): List<GithubRepository> = runBlocking {
         val client = HttpClient(Android)
 
         return@runBlocking GlobalScope.async {
