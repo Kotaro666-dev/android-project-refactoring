@@ -20,12 +20,13 @@ import kotlinx.coroutines.launch
 class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
 
     private lateinit var viewModel: SearchScreenViewModel
+    private lateinit var binding: FragmentSearchScreenBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val context = requireContext()
 
-        val binding = FragmentSearchScreenBinding.bind(view)
+        binding = FragmentSearchScreenBinding.bind(view)
         viewModel = ViewModelProvider(this)[SearchScreenViewModel::class.java]
 
         val layoutManager = LinearLayoutManager(context)
