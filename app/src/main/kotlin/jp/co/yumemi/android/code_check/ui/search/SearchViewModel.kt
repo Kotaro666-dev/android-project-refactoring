@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 YUMEMI Inc. All rights reserved.
  */
-package jp.co.yumemi.android.code_check.ui.search_screen
+package jp.co.yumemi.android.code_check.ui.search
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -23,7 +23,7 @@ import java.util.*
 const val GITHUB_SEARCH_API_ENDPOINT = "https://api.github.com/search/repositories"
 const val GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE = "application/vnd.github.v3+json"
 
-class SearchScreenViewModel : ViewModel() {
+class SearchViewModel : ViewModel() {
     private val client = HttpClient(Android)
 
     private val _githubRepositories = MutableLiveData<List<GithubRepository>>()
