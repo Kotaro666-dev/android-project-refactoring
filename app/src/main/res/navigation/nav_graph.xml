@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragment_search_screen">
+    app:startDestination="@id/fragment_search">
 
     <fragment
-        android:id="@+id/fragment_search_screen"
-        android:name="jp.co.yumemi.android.code_check.SearchScreenFragment"
+        android:id="@+id/fragment_search"
+        android:name="jp.co.yumemi.android.code_check.ui.search.SearchFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_search_screen">
+        tools:layout="@layout/fragment_search">
         <action
-            android:id="@+id/action_navigate_to_fragment_search_results_detail_screen"
-            app:destination="@id/fragment_search_results_detail_screen" />
+            android:id="@+id/action_navigate_to_fragment_search_results_detail"
+            app:destination="@id/fragment_search_results_detail" />
     </fragment>
 
     <fragment
-        android:id="@+id/fragment_search_results_detail_screen"
-        android:name="jp.co.yumemi.android.code_check.SearchResultsDetailScreenFragment"
+        android:id="@+id/fragment_search_results_detail"
+        android:name="jp.co.yumemi.android.code_check.ui.search_results_detail.SearchResultsDetailFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_search_results_detail_screen">
+        tools:layout="@layout/fragment_search_results_detail">
         <argument
             android:name="githubRepository"
-            app:argType="jp.co.yumemi.android.code_check.GithubRepository" />
+            app:argType="jp.co.yumemi.android.code_check.model.GithubRepository" />
     </fragment>
 
 </navigation>

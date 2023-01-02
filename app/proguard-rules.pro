@@ -25,4 +25,4 @@
 # 背景: コードの圧縮時に該当クラスファイルが削除されてしまっていた可能性がある
 # 参考資料: https://developer.android.com/studio/build/shrink-code#keep-code
 
--keep public class jp.co.yumemi.android.code_check.GithubRepository
+-keep public class jp.co.yumemi.android.code_check.model.GithubRepository
