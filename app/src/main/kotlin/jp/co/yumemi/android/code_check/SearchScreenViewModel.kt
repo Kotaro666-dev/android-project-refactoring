@@ -26,19 +26,27 @@ class SearchScreenViewModel : ViewModel() {
 
     fun searchGithubRepositories(searchKeyword: String): List<GithubRepository> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO) {
-            val response = requestGithubRepositories(searchKeyword)
-            // TODO: レスポンスエラーチェックする
-            val jsonItems = tryParseResponseBody(response) ?: return@withContext listOf()
-            val githubRepositories = createGithubRepositoryList(jsonItems)
-            Log.d("検索した日時", Date().toString())
-            return@withContext githubRepositories
+            try {
+                val response = tryRequestGithubRepositories(searchKeyword)
+                val jsonItems = tryParseResponseBody(response) ?: return@withContext listOf()
+                val githubRepositories = createGithubRepositoryList(jsonItems)
+                Log.d("検索した日時", Date().toString())
+                return@withContext githubRepositories
+            } catch (e: Exception) {
+                return@withContext listOf()
+            }
         }
     }
 
-    private suspend fun requestGithubRepositories(searchKeyword: String): HttpResponse {
-        return client.get(GITHUB_SEARCH_API_ENDPOINT) {
-            header("Accept", GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE)
-            parameter("q", searchKeyword)
+    private suspend fun tryRequestGithubRepositories(searchKeyword: String): HttpResponse {
+        return try {
+            client.get(GITHUB_SEARCH_API_ENDPOINT) {
+                header("Accept", GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE)
+                parameter("q", searchKeyword)
+            }
+        } catch (e: Exception) {
+            Log.e("[Exception]tryRequestGithubRepositories", e.toString())
+            throw e
         }
     }
 
@@ -48,7 +56,7 @@ class SearchScreenViewModel : ViewModel() {
             jsonBody.optJSONArray("items")
         } catch (e: JSONException) {
             Log.e("[JSONException]tryParseResponseBody", e.toString())
-            null
+            throw e
         }
     }
 
