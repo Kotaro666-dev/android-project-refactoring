@@ -36,7 +36,7 @@ class SearchScreenViewModel : ViewModel() {
                 val response = tryRequestGithubRepositories(searchKeyword)
                 val jsonItems = tryParseResponseBody(response)
                 if (jsonItems == null) {
-                    _githubRepositories.postValue(listOf())
+                    _githubRepositories.postValue(emptyList())
                     return@launch
                 }
                 val githubRepositories = createGithubRepositoryList(jsonItems)
@@ -44,7 +44,7 @@ class SearchScreenViewModel : ViewModel() {
                 _githubRepositories.postValue(githubRepositories)
                 return@launch
             } catch (e: Exception) {
-                _githubRepositories.postValue(listOf())
+                _githubRepositories.postValue(emptyList())
                 return@launch
             }
         }
