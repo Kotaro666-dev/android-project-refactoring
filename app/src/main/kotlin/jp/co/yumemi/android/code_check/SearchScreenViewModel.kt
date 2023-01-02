@@ -5,7 +5,10 @@ package jp.co.yumemi.android.code_check
 
 import android.os.Parcelable
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
@@ -24,29 +27,40 @@ const val GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE = "application/vnd.github.v3+jso
 class SearchScreenViewModel : ViewModel() {
     private val client = HttpClient(Android)
 
-    fun searchGithubRepositories(searchKeyword: String): List<GithubRepository> = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO) {
+    private val _githubRepositories = MutableLiveData<List<GithubRepository>>()
+    val githubRepositories: LiveData<List<GithubRepository>> get() = _githubRepositories
+
+    suspend fun searchGithubRepositories(searchKeyword: String) {
+        viewModelScope.launch {
             try {
                 val response = tryRequestGithubRepositories(searchKeyword)
-                val jsonItems = tryParseResponseBody(response) ?: return@withContext listOf()
+                val jsonItems = tryParseResponseBody(response)
+                if (jsonItems == null) {
+                    _githubRepositories.postValue(listOf())
+                    return@launch
+                }
                 val githubRepositories = createGithubRepositoryList(jsonItems)
                 Log.d("検索した日時", Date().toString())
-                return@withContext githubRepositories
+                _githubRepositories.postValue(githubRepositories)
+                return@launch
             } catch (e: Exception) {
-                return@withContext listOf()
+                _githubRepositories.postValue(listOf())
+                return@launch
             }
         }
     }
 
     private suspend fun tryRequestGithubRepositories(searchKeyword: String): HttpResponse {
-        return try {
-            client.get(GITHUB_SEARCH_API_ENDPOINT) {
-                header("Accept", GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE)
-                parameter("q", searchKeyword)
+        return withContext(Dispatchers.IO) {
+            try {
+                client.get(GITHUB_SEARCH_API_ENDPOINT) {
+                    header("Accept", GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE)
+                    parameter("q", searchKeyword)
+                }
+            } catch (e: Exception) {
+                Log.e("[Exception]tryRequestGithubRepositories", e.toString())
+                throw e
             }
-        } catch (e: Exception) {
-            Log.e("[Exception]tryRequestGithubRepositories", e.toString())
-            throw e
         }
     }
 
