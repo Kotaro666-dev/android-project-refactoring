@@ -23,7 +23,6 @@ class SearchScreenViewModel(
     val context: Context
 ) : ViewModel() {
 
-    // 検索結果
     // TODO: 複数のタスクを一つのメソッドで行っている
     // TODO: 1. API リクエストする
     // TODO: 2. 取得したデータのうち、必要なフィールドを抽出している
