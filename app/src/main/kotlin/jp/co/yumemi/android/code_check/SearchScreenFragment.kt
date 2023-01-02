@@ -27,7 +27,7 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
         val dividerItemDecoration =
             DividerItemDecoration(context!!, layoutManager.orientation)
         val adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
-            override fun itemClick(item: item) {
+            override fun itemClick(item: GithubRepository) {
                 gotoRepositoryFragment(item)
             }
         })
@@ -52,19 +52,19 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
         }
     }
 
-    fun gotoRepositoryFragment(item: item) {
+    fun gotoRepositoryFragment(item: GithubRepository) {
         val action = SearchScreenFragmentDirections
-            .actionRepositoriesFragmentToRepositoryFragment(item = item)
+            .actionRepositoriesFragmentToRepositoryFragment(githubRepository = item)
         findNavController().navigate(action)
     }
 }
 
-val diffCallback = object : DiffUtil.ItemCallback<item>() {
-    override fun areItemsTheSame(oldItem: item, newItem: item): Boolean {
+val diffCallback = object : DiffUtil.ItemCallback<GithubRepository>() {
+    override fun areItemsTheSame(oldItem: GithubRepository, newItem: GithubRepository): Boolean {
         return oldItem.name == newItem.name
     }
 
-    override fun areContentsTheSame(oldItem: item, newItem: item): Boolean {
+    override fun areContentsTheSame(oldItem: GithubRepository, newItem: GithubRepository): Boolean {
         return oldItem == newItem
     }
 
@@ -72,12 +72,12 @@ val diffCallback = object : DiffUtil.ItemCallback<item>() {
 
 class CustomAdapter(
     private val itemClickListener: OnItemClickListener,
-) : ListAdapter<item, CustomAdapter.ViewHolder>(diffCallback) {
+) : ListAdapter<GithubRepository, CustomAdapter.ViewHolder>(diffCallback) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     interface OnItemClickListener {
-        fun itemClick(item: item)
+        fun itemClick(item: GithubRepository)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

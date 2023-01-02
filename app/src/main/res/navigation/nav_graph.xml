@@ -21,8 +21,8 @@
         android:label="@string/app_name"
         tools:layout="@layout/fragment_search_results_detail_screen">
         <argument
-            android:name="item"
-            app:argType="jp.co.yumemi.android.code_check.item" />
+            android:name="githubRepository"
+            app:argType="jp.co.yumemi.android.code_check.GithubRepository" />
     </fragment>
 
 </navigation>
