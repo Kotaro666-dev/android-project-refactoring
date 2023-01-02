@@ -19,9 +19,6 @@ import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 import java.util.*
 
-/**
- *  SearchResultsDetailScreenFragment で使う
- */
 class SearchScreenViewModel(
     val context: Context
 ) : ViewModel() {
