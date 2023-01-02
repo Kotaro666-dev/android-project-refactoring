@@ -14,6 +14,7 @@ import io.ktor.client.statement.*
 import kotlinx.coroutines.*
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
@@ -27,7 +28,7 @@ class SearchScreenViewModel : ViewModel() {
         return@runBlocking withContext(Dispatchers.IO) {
             val response = requestGithubRepositories(searchKeyword)
             // TODO: レスポンスエラーチェックする
-            val jsonItems = parseResponseBody(response) ?: return@withContext listOf()
+            val jsonItems = tryParseResponseBody(response) ?: return@withContext listOf()
             val githubRepositories = createGithubRepositoryList(jsonItems)
             Log.d("検索した日時", Date().toString())
             return@withContext githubRepositories
@@ -41,10 +42,14 @@ class SearchScreenViewModel : ViewModel() {
         }
     }
 
-    private suspend fun parseResponseBody(response: HttpResponse): JSONArray? {
-        // TODO: 例外発生する可能性あり
-        val jsonBody = JSONObject(response.receive<String>())
-        return jsonBody.optJSONArray("items")
+    private suspend fun tryParseResponseBody(response: HttpResponse): JSONArray? {
+        return try {
+            val jsonBody = JSONObject(response.receive<String>())
+            jsonBody.optJSONArray("items")
+        } catch (e: JSONException) {
+            Log.e("[JSONException]tryParseResponseBody", e.toString())
+            null
+        }
     }
 
     private fun extractGithubRepositoryData(jsonItem: JSONObject): GithubRepository {
