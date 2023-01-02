@@ -28,7 +28,7 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
             DividerItemDecoration(context!!, layoutManager.orientation)
         val adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
             override fun itemClick(item: GithubRepository) {
-                gotoRepositoryFragment(item)
+                navigateToSearchResultsDetailScreen(item)
             }
         })
 
@@ -52,9 +52,9 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
         }
     }
 
-    fun gotoRepositoryFragment(item: GithubRepository) {
+    private fun navigateToSearchResultsDetailScreen(item: GithubRepository) {
         val action = SearchScreenFragmentDirections
-            .actionRepositoriesFragmentToRepositoryFragment(githubRepository = item)
+            .actionNavigateToFragmentSearchResultsDetailScreen(githubRepository = item)
         findNavController().navigate(action)
     }
 }
