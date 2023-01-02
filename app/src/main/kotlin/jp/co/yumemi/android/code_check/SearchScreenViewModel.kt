@@ -30,7 +30,7 @@ class SearchScreenViewModel(
         return@runBlocking withContext(Dispatchers.IO) {
             val response = requestGithubRepositories(searchKeyword)
             // TODO: レスポンスエラーチェックする
-            val jsonItems = parseResponseBody(response)
+            val jsonItems = parseResponseBody(response) ?: return@withContext listOf()
             val githubRepositories = createGithubRepositoryList(jsonItems)
             setLastSearchDate()
             return@withContext githubRepositories
@@ -44,10 +44,10 @@ class SearchScreenViewModel(
         }
     }
 
-    private suspend fun parseResponseBody(response: HttpResponse): JSONArray {
+    private suspend fun parseResponseBody(response: HttpResponse): JSONArray? {
         // TODO: 例外発生する可能性あり
         val jsonBody = JSONObject(response.receive<String>())
-        return jsonBody.optJSONArray("items")!!
+        return jsonBody.optJSONArray("items")
     }
 
     private fun extractGithubRepositoryData(jsonItem: JSONObject): GithubRepository {
