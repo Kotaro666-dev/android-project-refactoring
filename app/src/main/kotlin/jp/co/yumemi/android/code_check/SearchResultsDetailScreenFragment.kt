@@ -15,9 +15,7 @@ import jp.co.yumemi.android.code_check.databinding.FragmentSearchResultsDetailSc
 class SearchResultsDetailScreenFragment : Fragment(R.layout.fragment_search_results_detail_screen) {
 
     private val args: SearchResultsDetailScreenFragmentArgs by navArgs()
-
-    private var binding: FragmentSearchResultsDetailScreenBinding? = null
-    private val _binding get() = binding!!
+    private lateinit var binding: FragmentSearchResultsDetailScreenBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,12 +26,12 @@ class SearchResultsDetailScreenFragment : Fragment(R.layout.fragment_search_resu
 
         val githubRepository = args.githubRepository
 
-        _binding.ownerIconView.load(githubRepository.ownerIconUrl);
-        _binding.nameView.text = githubRepository.name;
-        _binding.languageView.text = githubRepository.language;
-        _binding.starsView.text = "${githubRepository.stargazersCount} stars";
-        _binding.watchersView.text = "${githubRepository.watchersCount} watchers";
-        _binding.forksView.text = "${githubRepository.forksCount} forks";
-        _binding.openIssuesView.text = "${githubRepository.openIssuesCount} open issues";
+        binding.ownerIconView.load(githubRepository.ownerIconUrl);
+        binding.nameView.text = githubRepository.name;
+        binding.languageView.text = githubRepository.language;
+        binding.starsView.text = "${githubRepository.stargazersCount} stars";
+        binding.watchersView.text = "${githubRepository.watchersCount} watchers";
+        binding.forksView.text = "${githubRepository.forksCount} forks";
+        binding.openIssuesView.text = "${githubRepository.openIssuesCount} open issues";
     }
 }
