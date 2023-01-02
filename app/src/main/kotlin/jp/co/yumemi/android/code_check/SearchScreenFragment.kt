@@ -33,16 +33,16 @@ class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
         })
 
         binding.searchInputText
-            .setOnEditorActionListener { editText, action, _ ->
-                if (action == EditorInfo.IME_ACTION_SEARCH) {
-                    editText.text.toString().let {
-                        viewModel.searchGithubRepositories(it).apply {
-                            adapter.submitList(this)
-                        }
-                    }
-                    return@setOnEditorActionListener true
+            .setOnEditorActionListener { searchInput, action, _ ->
+                val isSearchAction = action == EditorInfo.IME_ACTION_SEARCH
+                if (!isSearchAction) {
+                    return@setOnEditorActionListener false
                 }
-                return@setOnEditorActionListener false
+                val searchKeyword = searchInput.text.toString()
+                viewModel.searchGithubRepositories(searchKeyword).apply {
+                    adapter.submitList(this)
+                }
+                return@setOnEditorActionListener true
             }
 
         binding.recyclerView.also {

@@ -27,13 +27,13 @@ class SearchScreenViewModel(
     // TODO: 1. API リクエストする
     // TODO: 2. 取得したデータのうち、必要なフィールドを抽出している
     // TODO: 3. 返却するデータのリストを生成する
-    fun searchGithubRepositories(inputText: String): List<GithubRepository> = runBlocking {
+    fun searchGithubRepositories(searchKeyword: String): List<GithubRepository> = runBlocking {
         val client = HttpClient(Android)
 
         return@runBlocking GlobalScope.async {
             val response: HttpResponse = client?.get("https://api.github.com/search/repositories") {
                 header("Accept", "application/vnd.github.v3+json")
-                parameter("q", inputText)
+                parameter("q", searchKeyword)
             }
 
             val jsonBody = JSONObject(response.receive<String>())
