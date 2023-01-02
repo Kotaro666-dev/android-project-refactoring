@@ -26,7 +26,7 @@ class SearchResultsDetailScreenFragment : Fragment(R.layout.fragment_search_resu
 
         binding = FragmentSearchResultsDetailScreenBinding.bind(view)
 
-        var githubRepository = args.githubRepository
+        val githubRepository = args.githubRepository
 
         _binding.ownerIconView.load(githubRepository.ownerIconUrl);
         _binding.nameView.text = githubRepository.name;
