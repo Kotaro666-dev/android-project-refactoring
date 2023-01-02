@@ -3,7 +3,6 @@
  */
 package jp.co.yumemi.android.code_check
 
-import android.content.Context
 import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -21,9 +20,7 @@ import java.util.*
 const val GITHUB_SEARCH_API_ENDPOINT = "https://api.github.com/search/repositories"
 const val GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE = "application/vnd.github.v3+json"
 
-class SearchScreenViewModel(
-    val context: Context
-) : ViewModel() {
+class SearchScreenViewModel : ViewModel() {
     private val client = HttpClient(Android)
 
     fun searchGithubRepositories(searchKeyword: String): List<GithubRepository> = runBlocking {
@@ -61,7 +58,7 @@ class SearchScreenViewModel(
         return GithubRepository(
             name = name,
             ownerIconUrl = ownerIconUrl,
-            language = context.getString(R.string.written_language, language),
+            language = "Written in $language",
             stargazersCount = stargazersCount,
             watchersCount = watchersCount,
             forksCount = forksCount,
