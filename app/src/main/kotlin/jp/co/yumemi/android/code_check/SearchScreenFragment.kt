@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
@@ -15,12 +16,15 @@ import kotlinx.coroutines.launch
 
 class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {
 
+    private lateinit var viewModel: SearchScreenViewModel
+    private lateinit var binding: FragmentSearchScreenBinding
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val context = requireContext()
 
-        val binding = FragmentSearchScreenBinding.bind(view)
-        val viewModel = SearchScreenViewModel()
+        binding = FragmentSearchScreenBinding.bind(view)
+        viewModel = ViewModelProvider(this)[SearchScreenViewModel::class.java]
 
         val layoutManager = LinearLayoutManager(context)
         val dividerItemDecoration =
