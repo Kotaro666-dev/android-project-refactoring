@@ -5,13 +5,13 @@ package jp.co.yumemi.android.code_check
 
 import android.content.Context
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import jp.co.yumemi.android.code_check.MainActivity.Companion.lastSearchDate
 import kotlinx.coroutines.*
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
@@ -32,7 +32,7 @@ class SearchScreenViewModel(
             // TODO: レスポンスエラーチェックする
             val jsonItems = parseResponseBody(response) ?: return@withContext listOf()
             val githubRepositories = createGithubRepositoryList(jsonItems)
-            setLastSearchDate()
+            Log.d("検索した日時", Date().toString())
             return@withContext githubRepositories
         }
     }
@@ -77,10 +77,6 @@ class SearchScreenViewModel(
             githubRepositories.add(githubRepository)
         }
         return githubRepositories.toList()
-    }
-
-    private fun setLastSearchDate() {
-        lastSearchDate = Date()
     }
 }
 
