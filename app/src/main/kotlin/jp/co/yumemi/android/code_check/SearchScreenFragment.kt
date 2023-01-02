@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
 import jp.co.yumemi.android.code_check.databinding.FragmentSearchScreenBinding
+import jp.co.yumemi.android.code_check.model.GithubRepository
 import kotlinx.coroutines.launch
 
 class SearchScreenFragment : Fragment(R.layout.fragment_search_screen) {

@@ -3,7 +3,6 @@
  */
 package jp.co.yumemi.android.code_check
 
-import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,8 +13,8 @@ import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import jp.co.yumemi.android.code_check.model.GithubRepository
 import kotlinx.coroutines.*
-import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -33,6 +32,7 @@ class SearchScreenViewModel : ViewModel() {
     suspend fun searchGithubRepositories(searchKeyword: String) {
         viewModelScope.launch {
             try {
+                Log.d("検索した日時", Date().toString())
                 val response = tryRequestGithubRepositories(searchKeyword)
                 val jsonItems = tryParseResponseBody(response)
                 if (jsonItems == null) {
@@ -40,7 +40,6 @@ class SearchScreenViewModel : ViewModel() {
                     return@launch
                 }
                 val githubRepositories = createGithubRepositoryList(jsonItems)
-                Log.d("検索した日時", Date().toString())
                 _githubRepositories.postValue(githubRepositories)
                 return@launch
             } catch (e: Exception) {
@@ -103,14 +102,3 @@ class SearchScreenViewModel : ViewModel() {
         return githubRepositories.toList()
     }
 }
-
-@Parcelize
-data class GithubRepository(
-    val name: String,
-    val ownerIconUrl: String,
-    val language: String,
-    val stargazersCount: Long,
-    val watchersCount: Long,
-    val forksCount: Long,
-    val openIssuesCount: Long,
-) : Parcelable
