@@ -52,7 +52,7 @@ class SearchScreenViewModel(
 
     private fun extractGithubRepositoryData(jsonItem: JSONObject): GithubRepository {
         val name = jsonItem.optString("full_name")
-        val ownerIconUrl = jsonItem.optJSONObject("owner")!!.optString("avatar_url")
+        val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
         val language = jsonItem.optString("language")
         val stargazersCount = jsonItem.optLong("stargazers_count")
         val watchersCount = jsonItem.optLong("watchers_count")
@@ -72,7 +72,7 @@ class SearchScreenViewModel(
     private fun createGithubRepositoryList(jsonItems: JSONArray): List<GithubRepository> {
         val githubRepositories = mutableListOf<GithubRepository>()
         for (i in 0 until jsonItems.length()) {
-            val jsonItem = jsonItems.optJSONObject(i)!!
+            val jsonItem = jsonItems.optJSONObject(i) ?: continue
             val githubRepository = extractGithubRepositoryData(jsonItem)
             githubRepositories.add(githubRepository)
         }
