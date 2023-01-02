@@ -42,10 +42,9 @@ class SearchScreenViewModel(
 
             val githubRepositories = mutableListOf<GithubRepository>()
 
-            /**
-             * アイテムの個数分ループする
-             */
             for (i in 0 until jsonItems.length()) {
+
+                // TODO: 抽出してデータクラスのインスタンスを生成する作業をメソッド化して、処理内容を明らかにする
                 val jsonItem = jsonItems.optJSONObject(i)!!
                 val name = jsonItem.optString("full_name")
                 val ownerIconUrl = jsonItem.optJSONObject("owner")!!.optString("avatar_url")
