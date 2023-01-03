@@ -55,6 +55,11 @@ android {
     buildFeatures {
         viewBinding true
     }
+    // 以下のエラーに対応するため追加しました
+    // java.lang.RuntimeException: Method d in android.util.Log not mocked. See http://g.co/androidstudio/not-mocked for details.
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
