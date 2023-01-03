@@ -24,18 +24,18 @@ class SearchResultsDetailFragment : Fragment(R.layout.fragment_search_results_de
         binding = FragmentSearchResultsDetailBinding.bind(view)
         viewModel = ViewModelProvider(this)[SearchResultsDetailViewModel::class.java]
 
-        val githubRepository = args.githubRepository
+        val githubRepositoryData = args.githubRepositoryData
 
-        binding.ownerIconView.load(githubRepository.ownerIconUrl)
-        binding.nameView.text = githubRepository.name
-        binding.languageView.text = githubRepository.language
+        binding.ownerIconView.load(githubRepositoryData.ownerIconUrl)
+        binding.nameView.text = githubRepositoryData.name
+        binding.languageView.text = githubRepositoryData.language
         binding.starsView.text =
-            getString(R.string.stars_count, githubRepository.stargazersCount.toString())
+            getString(R.string.stars_count, githubRepositoryData.stargazersCount.toString())
         binding.watchersView.text =
-            getString(R.string.watchers_count, githubRepository.watchersCount.toString())
+            getString(R.string.watchers_count, githubRepositoryData.watchersCount.toString())
         binding.forksView.text =
-            getString(R.string.forks_count, githubRepository.forksCount.toString())
+            getString(R.string.forks_count, githubRepositoryData.forksCount.toString())
         binding.openIssuesView.text =
-            getString(R.string.open_issues_count, githubRepository.openIssuesCount.toString())
+            getString(R.string.open_issues_count, githubRepositoryData.openIssuesCount.toString())
     }
 }

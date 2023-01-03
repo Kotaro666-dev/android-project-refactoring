@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.*
 import jp.co.yumemi.android.code_check.utilities.CustomAdapter
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.databinding.FragmentSearchBinding
-import jp.co.yumemi.android.code_check.model.GithubRepository
+import jp.co.yumemi.android.code_check.model.GithubRepositoryData
 import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
@@ -33,7 +33,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val dividerItemDecoration =
             DividerItemDecoration(context, layoutManager.orientation)
         val adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
-            override fun itemClick(item: GithubRepository) {
+            override fun itemClick(item: GithubRepositoryData) {
                 navigateToSearchResultsDetail(item)
             }
         })
@@ -62,9 +62,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         })
     }
 
-    private fun navigateToSearchResultsDetail(item: GithubRepository) {
+    private fun navigateToSearchResultsDetail(item: GithubRepositoryData) {
         val action = SearchFragmentDirections
-            .actionNavigateToFragmentSearchResultsDetail(githubRepository = item)
+            .actionNavigateToFragmentSearchResultsDetail(githubRepositoryData = item)
         findNavController().navigate(action)
     }
 }

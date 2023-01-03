@@ -13,7 +13,7 @@ import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import jp.co.yumemi.android.code_check.model.GithubRepository
+import jp.co.yumemi.android.code_check.model.GithubRepositoryData
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONException
@@ -26,8 +26,8 @@ const val GITHUB_SEARCH_API_HEADER_ACCEPT_VALUE = "application/vnd.github.v3+jso
 class SearchViewModel : ViewModel() {
     private val client = HttpClient(Android)
 
-    private val _githubRepositories = MutableLiveData<List<GithubRepository>>()
-    val githubRepositories: LiveData<List<GithubRepository>> get() = _githubRepositories
+    private val _githubRepositories = MutableLiveData<List<GithubRepositoryData>>()
+    val githubRepositories: LiveData<List<GithubRepositoryData>> get() = _githubRepositories
 
     suspend fun searchGithubRepositories(searchKeyword: String) {
         viewModelScope.launch {
