@@ -91,6 +91,10 @@ dependencies {
     // Hilt
     implementation 'com.google.dagger:hilt-android:2.37'
     kapt 'com.google.dagger:hilt-android-compiler:2.37'
+
+    // JUnit で HTTP レスポンスのパース処理がうまくいっていない問題の対応
+    // 参考資料: https://stackoverflow.com/questions/49667567/android-org-json-jsonobject-returns-null-in-unit-tests
+    testImplementation 'org.json:json:20180813'
 }
 
 // Allow references to generated code
