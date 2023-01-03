@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class GithubRepository(
+data class GithubRepositoryData(
     val name: String,
     val ownerIconUrl: String,
     val language: String,

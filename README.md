@@ -17,7 +17,7 @@
 本家プロジェクトで指定された環境に合わせています。
 
 - IDE：Android Studio Arctic Fox | 2020.3.1 Patch 1
-  - [こちらのアーカイブ](https://developer.android.com/studio/archive)からインストールします
+    - [こちらのアーカイブ](https://developer.android.com/studio/archive)からインストールします
 - Kotlin：1.5.31
 - Java：11
 - Gradle：7.0.1
@@ -31,7 +31,14 @@
 3. GitHub API（`search/repositories`）でリポジトリを検索し、結果一覧を概要（リポジトリ名）で表示する
 4. 特定の結果を選択したら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star 数、Watcher 数、Fork 数、Issue 数）を表示する
 
-##　提出方法
+### 採用アーキテクチャ
+
+MVVM + UseCase + Repository パターンを導入しました。
+このアーキテクチャの導入を実現するために、[Dagger Hilt](https://dagger.dev/hilt/) ライブラリによる依存性注入を使用しています。
+
+参考資料: [Hilt を使用した依存関係の注入](https://developer.android.com/training/dependency-injection/hilt-android)
+
+## 　提出方法
 
 本プロジェクトのリポジトリを public にした状態で、URL を共有する。
 

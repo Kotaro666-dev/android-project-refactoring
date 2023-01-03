@@ -7,33 +7,34 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
-import jp.co.yumemi.android.code_check.utilities.CustomAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.databinding.FragmentSearchBinding
-import jp.co.yumemi.android.code_check.model.GithubRepository
+import jp.co.yumemi.android.code_check.model.GithubRepositoryData
+import jp.co.yumemi.android.code_check.utilities.CustomAdapter
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
-    private lateinit var viewModel: SearchViewModel
     private lateinit var binding: FragmentSearchBinding
+    private val viewModel: SearchViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val context = requireContext()
 
         binding = FragmentSearchBinding.bind(view)
-        viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
 
         val layoutManager = LinearLayoutManager(context)
         val dividerItemDecoration =
             DividerItemDecoration(context, layoutManager.orientation)
         val adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
-            override fun itemClick(item: GithubRepository) {
+            override fun itemClick(item: GithubRepositoryData) {
                 navigateToSearchResultsDetail(item)
             }
         })
@@ -62,9 +63,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         })
     }
 
-    private fun navigateToSearchResultsDetail(item: GithubRepository) {
+    private fun navigateToSearchResultsDetail(item: GithubRepositoryData) {
         val action = SearchFragmentDirections
-            .actionNavigateToFragmentSearchResultsDetail(githubRepository = item)
+            .actionNavigateToFragmentSearchResultsDetail(githubRepositoryData = item)
         findNavController().navigate(action)
     }
 }
