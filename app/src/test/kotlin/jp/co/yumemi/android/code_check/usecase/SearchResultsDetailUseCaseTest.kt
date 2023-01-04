@@ -1,3 +1,5 @@
+@file:Suppress("NonAsciiCharacters")
+
 package jp.co.yumemi.android.code_check.usecase
 
 import jp.co.yumemi.android.code_check.data.api.GithubApiClient
