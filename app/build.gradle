@@ -6,7 +6,18 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
 }
 
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
 android {
+    signingConfigs {
+        release {
+            storeFile rootProject.file('jp.co.yumemi.android.codecheck.jks')
+            storePassword 'yumemi'
+            keyAlias 'app_key'
+            keyPassword 'yumemi'
+        }
+    }
     compileSdk 31
 
     defaultConfig {
@@ -17,12 +28,23 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // 参考資料: https://developer.android.com/training/dependency-injection/hilt-testing#instrumented-tests
+        testInstrumentationRunner = "jp.co.yumemi.android.code_check.CustomTestRunner"
     }
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            applicationIdSuffix ".release"
             minifyEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+            minifyEnabled false
+            debuggable true
         }
     }
     compileOptions {
@@ -35,29 +57,56 @@ android {
     buildFeatures {
         viewBinding true
     }
+    // 以下のエラーに対応するため追加しました
+    // java.lang.RuntimeException: Method d in android.util.Log not mocked. See http://g.co/androidstudio/not-mocked for details.
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    // 2022/12/30 時点でビルドできる最新のバージョンに設定済み
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
 
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'io.ktor:ktor-client-android:1.6.4'
 
     implementation 'io.coil-kt:coil:1.3.2'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // Hilt
+    implementation 'com.google.dagger:hilt-android:2.37'
+    kapt 'com.google.dagger:hilt-android-compiler:2.37'
+
+    // JUnit で HTTP レスポンスのパース処理がうまくいっていない問題の対応
+    // 参考資料: https://stackoverflow.com/questions/49667567/android-org-json-jsonobject-returns-null-in-unit-tests
+    testImplementation 'org.json:json:20180813'
+
+    debugImplementation "androidx.fragment:fragment-testing:1.5.5"
+
+    // For instrumented tests.
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.37")
+    // ...with Kotlin.
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.37")
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

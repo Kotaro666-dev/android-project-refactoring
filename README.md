@@ -2,7 +2,9 @@
 
 ## 概要
 
-本プロジェクトは株式会社ゆめみ（以下弊社）が、弊社に Android エンジニアを希望する方に出す課題のベースプロジェクトです。本課題が与えられた方は、下記の概要を詳しく読んだ上で課題を取り組んでください。
+本プロジェクトは株式会社ゆめみ（以下弊社）が、弊社に Android エンジニアを希望する方に出された課題のベースプロジェクトです。
+
+本家プロジェクトは、[こちら](https://github.com/yumemi-inc/android-engineer-codecheck)
 
 ## アプリ仕様
 
@@ -12,37 +14,67 @@
 
 ### 環境
 
+本家プロジェクトで指定された環境に合わせています。
+
 - IDE：Android Studio Arctic Fox | 2020.3.1 Patch 1
+    - [こちらのアーカイブ](https://developer.android.com/studio/archive)からインストールします
 - Kotlin：1.5.31
 - Java：11
 - Gradle：7.0.1
 - minSdk：23
 - targetSdk：31
 
-※ ライブラリの利用はオープンソースのものに限ります。
-
 ### 動作
 
-1. 何かしらのキーワードを入力
-2. GitHub API（`search/repositories`）でリポジトリを検索し、結果一覧を概要（リポジトリ名）で表示
-3. 特定の結果を選択したら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star 数、Watcher 数、Fork 数、Issue 数）を表示
+1. アプリを起動する
+2. 検索バーに適当なキーワードを入力する
+3. GitHub API（`search/repositories`）でリポジトリを検索し、結果一覧を概要（リポジトリ名）で表示する
+4. 特定の結果を選択したら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star 数、Watcher 数、Fork 数、Issue 数）を表示する
 
-## 課題取り組み方法
+### 採用アーキテクチャ
 
-Issues を確認した上、本プロジェクトを [**Duplicate** してください](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/duplicating-a-repository)（Fork しないようにしてください。必要ならプライベートリポジトリにしても大丈夫です）。今後のコミットは全てご自身のリポジトリで行ってください。
+MVVM + UseCase + Repository パターンを導入しました。
+このアーキテクチャの導入を実現するために、[Dagger Hilt](https://dagger.dev/hilt/) ライブラリによる依存性注入を使用しています。
 
-コードチェックの課題 Issue は全て [`課題`](https://github.com/yumemi-inc/android-engineer-codecheck/milestone/1) Milestone がついており、難易度に応じて Label が [`初級`](https://github.com/yumemi-inc/android-engineer-codecheck/issues?q=is%3Aopen+is%3Aissue+label%3A初級+milestone%3A課題)、[`中級`](https://github.com/yumemi-inc/android-engineer-codecheck/issues?q=is%3Aopen+is%3Aissue+label%3A中級+milestone%3A課題+) と [`ボーナス`](https://github.com/yumemi-inc/android-engineer-codecheck/issues?q=is%3Aopen+is%3Aissue+label%3Aボーナス+milestone%3A課題+) に分けられています。課題の必須／選択は下記の表とします。
+参考資料: [Hilt を使用した依存関係の注入](https://developer.android.com/training/dependency-injection/hilt-android)
 
-|   | 初級 | 中級 | ボーナス
-|--:|:--:|:--:|:--:|
-| 新卒／未経験者 | 必須 | 選択 | 選択 |
-| 中途／経験者 | 必須 | 必須 | 選択 |
+### プロジェクト内のディレクトリ構造
 
-課題 Issueをご自身のリポジトリーにコピーするGitHub Actionsをご用意しております。  
-[こちらのWorkflow](./.github/workflows/copy-issues.yml)を[手動でトリガーする](https://docs.github.com/ja/actions/managing-workflow-runs/manually-running-a-workflow)ことでコピーできますのでご活用下さい。
+- data
+    - api
+        - 外部ネットワークとのAPI処理を担当します
+        - 今回のプロジェクトでは、GithubSearchAPI との処理を行っています
+    - repository
+        - ネットワークやDB、ファイルIOなどのデータソースへのアクセス処理を担当します
+        - 今回のプロジェクトでは、アプリ層からのネットワーク通信処理の依頼を対応しています
+- di
+    - Dagger Hilt での依存性注入処理に必要な対応をしています
+    - 今回のプロジェクトでは、Class と Interface の紐付け処理を行っています
+- model
+    - データを表現するオブジェクトクラスの管理を担当します
+    - 今回のプロジェクトでは、GithubRepositoryData クラスを管理しています
+- ui
+    - アプリデータの表示やユーザー操作によるイベント対応や変更処理を担当します
+    - データの保持と処理は、ViewModel が対応します
+- usecase
+    - ui 層と data 層の間で、複雑なビジネスロジック処理を担当します
+    - 今回のプロジェクトでは、data 層から取得したネットワーク通信結果を変換する作業を行っています
+- utilities
+    - 補助的な機能処理を担当します
+    - 今回のプロジェクトでは、RecyclerView で必要な Adapter クラスの管理をしています
 
-課題が完成したら、リポジトリのアドレスを教えてください。
+### リファクタリングする際に意識した点
+
+- 既存実装方法に不具合がない限り、現在の実装方針を踏襲するように心がけました
+- コメントがなくても、クラス名やメソッド名、変数名からやっている処理を理解できるように努力しました
+- Google が推奨しているアーキテクチャを採用することで、他者がオンボーディングしやすいプロジェクト構成にしました
+- Dagger Hilt を導入したアーキテクチャを採用して、シンプルな依存関係のアーキテクチャを作るように努力しました
+- テストケース名とその内容から、アプリ処理の仕様が理解できるように工夫しました
+
+## 　提出方法
+
+本プロジェクトのリポジトリを public にした状態で、URL を共有する。
 
 ## 参考記事
 
-提出された課題の評価ポイントに関しては、[こちらの記事](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f)に詳しく書かれてありますので、ぜひご覧ください。
+- [ゆめみの Android の採用コーディング試験を公開しました](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f)
