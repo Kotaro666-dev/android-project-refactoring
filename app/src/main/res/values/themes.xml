@@ -21,4 +21,6 @@
         <item name="boxBackgroundMode">none</item>
     </style>
 
+    <color name="customTextColor">@color/black</color>
+
 </resources>
