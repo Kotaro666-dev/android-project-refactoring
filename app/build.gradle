@@ -28,6 +28,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // 参考資料: https://developer.android.com/training/dependency-injection/hilt-testing#instrumented-tests
+        testInstrumentationRunner = "jp.co.yumemi.android.code_check.CustomTestRunner"
     }
 
     buildTypes {
@@ -95,6 +97,13 @@ dependencies {
     // JUnit で HTTP レスポンスのパース処理がうまくいっていない問題の対応
     // 参考資料: https://stackoverflow.com/questions/49667567/android-org-json-jsonobject-returns-null-in-unit-tests
     testImplementation 'org.json:json:20180813'
+
+    debugImplementation "androidx.fragment:fragment-testing:1.5.5"
+
+    // For instrumented tests.
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.37")
+    // ...with Kotlin.
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.37")
 }
 
 // Allow references to generated code
