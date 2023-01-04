@@ -8,6 +8,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -64,6 +68,21 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewModel.githubRepositories.observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
+
+        viewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
+            binding.composableCircularProgressIndicator.apply {
+                // Dispose of the Composition when the view's LifecycleOwner is destroyed
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    MaterialTheme {
+                        if (isLoading) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+            }
+        })
+    }
 
     private fun hideSoftKeyboard(searchInput: TextView) {
         val inputMethodManager =
