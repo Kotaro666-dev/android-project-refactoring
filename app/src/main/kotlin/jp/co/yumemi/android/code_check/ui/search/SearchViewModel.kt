@@ -27,15 +27,21 @@ class SearchViewModel @Inject constructor(private val useCase: SearchResultsDeta
     private val _githubRepositories = MutableLiveData<List<GithubRepositoryData>>()
     val githubRepositories: LiveData<List<GithubRepositoryData>> get() = _githubRepositories
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     suspend fun searchGithubRepositories(searchKeyword: String) {
         viewModelScope.launch {
             try {
+                _isLoading.postValue(true)
                 Log.d("検索した日時", Date().toString())
                 val githubRepositories = useCase.get(searchKeyword)
                 _githubRepositories.postValue(githubRepositories)
+                _isLoading.postValue(false)
                 return@launch
             } catch (e: Exception) {
                 _githubRepositories.postValue(emptyList())
+                _isLoading.postValue(false)
                 return@launch
             }
         }
