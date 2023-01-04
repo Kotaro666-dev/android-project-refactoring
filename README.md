@@ -38,6 +38,31 @@ MVVM + UseCase + Repository パターンを導入しました。
 
 参考資料: [Hilt を使用した依存関係の注入](https://developer.android.com/training/dependency-injection/hilt-android)
 
+### プロジェクト内のディレクトリ構造
+
+- data
+    - api
+        - 外部ネットワークとのAPI処理を担当します
+        - 今回のプロジェクトでは、GithubSearchAPI との処理を行っています
+    - repository
+        - ネットワークやDB、ファイルIOなどのデータソースへのアクセス処理を担当します
+        - 今回のプロジェクトでは、アプリ層からのネットワーク通信処理の依頼を対応しています
+- di
+    - Dagger Hilt での依存性注入処理に必要な対応をしています
+    - 今回のプロジェクトでは、Class と Interface の紐付け処理を行っています
+- model
+    - データを表現するオブジェクトクラスの管理を担当します
+    - 今回のプロジェクトでは、GithubRepositoryData クラスを管理しています
+- ui
+    - アプリデータの表示やユーザー操作によるイベント対応や変更処理を担当します
+    - データの保持と処理は、ViewModel が対応します
+- usecase
+    - ui 層と data 層の間で、複雑なビジネスロジック処理を担当します
+    - 今回のプロジェクトでは、data 層から取得したネットワーク通信結果を変換する作業を行っています
+- utilities
+    - 補助的な機能処理を担当します
+    - 今回のプロジェクトでは、RecyclerView で必要な Adapter クラスの管理をしています
+
 ## 　提出方法
 
 本プロジェクトのリポジトリを public にした状態で、URL を共有する。
