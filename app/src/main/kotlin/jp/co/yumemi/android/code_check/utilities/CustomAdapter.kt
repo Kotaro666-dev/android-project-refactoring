@@ -1,4 +1,4 @@
-package jp.co.yumemi.android.code_check
+package jp.co.yumemi.android.code_check.utilities
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,15 +7,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import jp.co.yumemi.android.code_check.R
+import jp.co.yumemi.android.code_check.model.GithubRepositoryData
 
 class CustomAdapter(
     private val itemClickListener: OnItemClickListener,
-) : ListAdapter<GithubRepository, CustomAdapter.ViewHolder>(diffCallback) {
+) : ListAdapter<GithubRepositoryData, CustomAdapter.ViewHolder>(diffCallback) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     interface OnItemClickListener {
-        fun itemClick(item: GithubRepository)
+        fun itemClick(item: GithubRepositoryData)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,17 +37,17 @@ class CustomAdapter(
     }
 
     companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<GithubRepository>() {
+        val diffCallback = object : DiffUtil.ItemCallback<GithubRepositoryData>() {
             override fun areItemsTheSame(
-                oldItem: GithubRepository,
-                newItem: GithubRepository
+                oldItem: GithubRepositoryData,
+                newItem: GithubRepositoryData
             ): Boolean {
                 return oldItem.name == newItem.name
             }
 
             override fun areContentsTheSame(
-                oldItem: GithubRepository,
-                newItem: GithubRepository
+                oldItem: GithubRepositoryData,
+                newItem: GithubRepositoryData
             ): Boolean {
                 return oldItem == newItem
             }
