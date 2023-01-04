@@ -3,9 +3,15 @@
  */
 package jp.co.yumemi.android.code_check.ui.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -46,6 +52,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     return@setOnEditorActionListener false
                 }
                 val searchKeyword = searchInput.text.toString()
+                hideSoftKeyboard(searchInput)
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.searchGithubRepositories(searchKeyword)
                 }
@@ -61,6 +68,38 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewModel.githubRepositories.observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
+
+        viewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
+            binding.composableCircularProgressIndicator.apply {
+                // Dispose of the Composition when the view's LifecycleOwner is destroyed
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    MaterialTheme {
+                        if (isLoading) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+            }
+        })
+
+        viewModel.hasError.observe(viewLifecycleOwner, { hasError ->
+            if (hasError) {
+                binding.errorMessageText.visibility = View.VISIBLE
+            } else {
+                binding.errorMessageText.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun hideSoftKeyboard(searchInput: TextView) {
+        val inputMethodManager =
+            this.requireContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(
+            searchInput.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
     }
 
     private fun navigateToSearchResultsDetail(item: GithubRepositoryData) {

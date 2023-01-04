@@ -1,3 +1,5 @@
+@file:Suppress("RemoveRedundantBackticks", "NonAsciiCharacters", "NonAsciiCharacters")
+
 package jp.co.yumemi.android.code_check.ui.search
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
