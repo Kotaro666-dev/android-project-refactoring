@@ -46,19 +46,17 @@ class SearchResultsDetailUseCaseTest {
     }
 
     @ExperimentalCoroutinesApi
-    @Test
-    fun `【準正常系】空文字のキーワードで検索した場合、空の配列が返却される`() = runBlocking {
+    @Test(expected = Exception::class)
+    fun `【準正常系】空文字のキーワードで検索した場合、例外が発生する`(): Unit = runBlocking {
         val emptyKeyword = ""
-        val githubRepositories = searchResultsDetailUseCase.get(emptyKeyword)
-        Assert.assertTrue(githubRepositories.isEmpty())
+        searchResultsDetailUseCase.get(emptyKeyword)
     }
 
     @ExperimentalCoroutinesApi
-    @Test
-    fun `【準正常系】256 文字超のキーワードで検索した場合、空の配列が返却される`() = runBlocking {
+    @Test(expected = Exception::class)
+    fun `【準正常系】256 文字超のキーワードで検索した場合、例外が発生する`(): Unit = runBlocking {
         val keywordWith257Letters =
             "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw"
-        val githubRepositories = searchResultsDetailUseCase.get(keywordWith257Letters)
-        Assert.assertTrue(githubRepositories.isEmpty())
+        searchResultsDetailUseCase.get(keywordWith257Letters)
     }
 }

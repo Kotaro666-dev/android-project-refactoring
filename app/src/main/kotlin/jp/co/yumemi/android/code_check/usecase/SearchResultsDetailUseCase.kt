@@ -21,7 +21,7 @@ class SearchResultsDetailUseCase @Inject constructor(private val githubRepositor
             val jsonItems = tryParseResponseBody(response) ?: return emptyList()
             return createGithubRepositoryList(jsonItems)
         } catch (e: Exception) {
-            return emptyList()
+            throw e
         }
     }
 

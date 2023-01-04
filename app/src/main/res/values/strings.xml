@@ -11,4 +11,5 @@
     <string name="watchers_default_value_text">38530 watchers</string>
     <string name="forks_default_values_text">4675 forks</string>
     <string name="open_issues_default_value_text">131 open issues</string>
+    <string name="error_message_text">検索に失敗しました。\n時間を開けて、再度お試しください。</string>
 </resources>

@@ -48,6 +48,18 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <TextView
+        android:id="@+id/error_message_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="50sp"
+        android:text="@string/error_message_text"
+        android:textColor="@color/customTextColor"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_bar" />
+
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/composable_circular_progress_indicator"
         android:layout_width="wrap_content"

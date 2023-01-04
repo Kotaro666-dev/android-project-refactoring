@@ -82,6 +82,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
             }
         })
+
+        viewModel.hasError.observe(viewLifecycleOwner, { hasError ->
+            if (hasError) {
+                binding.errorMessageText.visibility = View.VISIBLE
+            } else {
+                binding.errorMessageText.visibility = View.GONE
+            }
+        })
     }
 
     private fun hideSoftKeyboard(searchInput: TextView) {
