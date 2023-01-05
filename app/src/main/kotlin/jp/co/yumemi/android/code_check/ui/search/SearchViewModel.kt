@@ -24,10 +24,10 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(private val useCase: SearchResultsDetailUseCase) :
     ViewModel() {
-    private val _githubRepositories = MutableLiveData<List<GithubRepositoryData>>()
+    private val _githubRepositories = MutableLiveData<List<GithubRepositoryData>>(emptyList())
     val githubRepositories: LiveData<List<GithubRepositoryData>> get() = _githubRepositories
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     private val _hasError = MutableLiveData(false)
