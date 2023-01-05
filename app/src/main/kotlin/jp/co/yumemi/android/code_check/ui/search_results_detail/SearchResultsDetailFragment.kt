@@ -31,23 +31,9 @@ class SearchResultsDetailFragment : Fragment(R.layout.fragment_search_results_de
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding = FragmentSearchResultsDetailBinding.bind(view)
 
-        val githubRepositoryData = args.githubRepositoryData
-
-        binding.ownerIconView.load(githubRepositoryData.ownerIconUrl)
-        binding.nameView.text = githubRepositoryData.name
-        binding.languageView.text = githubRepositoryData.language
-        binding.starsView.text =
-            getString(R.string.stars_count, githubRepositoryData.stargazersCount.toString())
-        binding.watchersView.text =
-            getString(R.string.watchers_count, githubRepositoryData.watchersCount.toString())
-        binding.forksView.text =
-            getString(R.string.forks_count, githubRepositoryData.forksCount.toString())
-        binding.openIssuesView.text =
-            getString(R.string.open_issues_count, githubRepositoryData.openIssuesCount.toString())
-
+        bindGithubRepositoryData()
         enableBackButtonOnAppBar()
     }
 
@@ -61,6 +47,21 @@ class SearchResultsDetailFragment : Fragment(R.layout.fragment_search_results_de
             // 参考資料: https://developer.android.com/jetpack/androidx/releases/activity#1.4.0-alpha01
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun bindGithubRepositoryData() {
+        val githubRepositoryData = args.githubRepositoryData
+        binding.ownerIconView.load(githubRepositoryData.ownerIconUrl)
+        binding.nameView.text = githubRepositoryData.name
+        binding.languageView.text = githubRepositoryData.language
+        binding.starsView.text =
+            getString(R.string.stars_count, githubRepositoryData.stargazersCount.toString())
+        binding.watchersView.text =
+            getString(R.string.watchers_count, githubRepositoryData.watchersCount.toString())
+        binding.forksView.text =
+            getString(R.string.forks_count, githubRepositoryData.forksCount.toString())
+        binding.openIssuesView.text =
+            getString(R.string.open_issues_count, githubRepositoryData.openIssuesCount.toString())
     }
 
     private fun enableBackButtonOnAppBar() {

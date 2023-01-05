@@ -32,18 +32,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val context = requireContext()
-
         binding = FragmentSearchBinding.bind(view)
 
-        val layoutManager = LinearLayoutManager(context)
-        val dividerItemDecoration =
-            DividerItemDecoration(context, layoutManager.orientation)
-        val adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
+        val customAdapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
             override fun itemClick(item: GithubRepositoryData) {
                 navigateToSearchResultsDetail(item)
             }
         })
+        setRecyclerView(customAdapter = customAdapter)
 
         binding.searchInputText
             .setOnEditorActionListener { searchInput, action, _ ->
@@ -59,14 +55,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 return@setOnEditorActionListener true
             }
 
-        binding.recyclerView.also {
-            it.layoutManager = layoutManager
-            it.addItemDecoration(dividerItemDecoration)
-            it.adapter = adapter
-        }
-
         viewModel.githubRepositories.observe(viewLifecycleOwner, {
-            adapter.submitList(it)
+            customAdapter.submitList(it)
         })
 
         viewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
@@ -90,6 +80,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 binding.errorMessageText.visibility = View.GONE
             }
         })
+    }
+
+    private fun setRecyclerView(customAdapter: CustomAdapter) {
+        val context = requireContext()
+        val layoutManager = LinearLayoutManager(context)
+        val dividerItemDecoration =
+            DividerItemDecoration(context, layoutManager.orientation)
+        binding.recyclerView.also {
+            it.layoutManager = layoutManager
+            it.addItemDecoration(dividerItemDecoration)
+            it.adapter = customAdapter
+        }
     }
 
     private fun hideSoftKeyboard(searchInput: TextView) {
