@@ -38,8 +38,10 @@ class SearchViewModel @Inject constructor(private val useCase: SearchResultsDeta
             try {
                 _hasError.postValue(false)
                 _isLoading.postValue(true)
+
                 Log.d("検索した日時", Date().toString())
                 val githubRepositories = useCase.get(searchKeyword)
+
                 _githubRepositories.postValue(githubRepositories)
                 _isLoading.postValue(false)
                 return@launch
