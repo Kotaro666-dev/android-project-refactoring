@@ -24,14 +24,15 @@ import jp.co.yumemi.android.code_check.databinding.FragmentSearchResultsDetailBi
 class SearchResultsDetailFragment : Fragment(R.layout.fragment_search_results_detail) {
 
     private val args: SearchResultsDetailFragmentArgs by navArgs()
-    private lateinit var binding: FragmentSearchResultsDetailBinding
+    private var _binding: FragmentSearchResultsDetailBinding? = null
+    private val binding get() = _binding!!
 
     // ビジネスロジックを実装する際には、以下の viewModel を使ってください
     private val viewModel: SearchResultsDetailViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentSearchResultsDetailBinding.bind(view)
+        _binding = FragmentSearchResultsDetailBinding.bind(view)
 
         bindGithubRepositoryData()
         enableBackButtonOnAppBar()
@@ -47,6 +48,11 @@ class SearchResultsDetailFragment : Fragment(R.layout.fragment_search_results_de
             // 参考資料: https://developer.android.com/jetpack/androidx/releases/activity#1.4.0-alpha01
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     private fun bindGithubRepositoryData() {

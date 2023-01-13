@@ -27,12 +27,13 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentSearchBinding.bind(view)
+        _binding = FragmentSearchBinding.bind(view)
 
         val customAdapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
             override fun itemClick(item: GithubRepositoryData) {
@@ -80,6 +81,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 binding.errorMessageText.visibility = View.GONE
             }
         })
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     private fun setRecyclerView(customAdapter: CustomAdapter) {
