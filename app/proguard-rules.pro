@@ -25,4 +25,9 @@
 # 背景: コードの圧縮時に該当クラスファイルが削除されてしまっていた可能性がある
 # 参考資料: https://developer.android.com/studio/build/shrink-code#keep-code
 
--keep public class jp.co.yumemi.android.code_check.model.GithubRepositoryData
+-keep @kotlinx.parcelize.Parcelize public class *
+
+# Serialization の難読化対応
+# https://github.com/Kotlin/kotlinx.serialization#android
+
+-keep enum * { *; }
