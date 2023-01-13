@@ -1,7 +1,6 @@
 /*
  * Copyright © 2021 YUMEMI Inc. All rights reserved.
  */
-@file:Suppress("unused")
 
 package jp.co.yumemi.android.code_check.ui.search_results_detail
 
@@ -28,6 +27,7 @@ class SearchResultsDetailFragment : Fragment(R.layout.fragment_search_results_de
     private val binding get() = _binding!!
 
     // ビジネスロジックを実装する際には、以下の viewModel を使ってください
+    @Suppress("unused")
     private val viewModel: SearchResultsDetailViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
