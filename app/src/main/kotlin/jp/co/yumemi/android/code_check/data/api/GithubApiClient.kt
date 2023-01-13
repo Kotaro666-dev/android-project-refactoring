@@ -6,11 +6,8 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class GithubApiClient @Inject constructor() {
+class GithubApiClient {
     private val client = HttpClient(Android)
 
     suspend fun getRepositories(searchKeyword: String): HttpResponse {

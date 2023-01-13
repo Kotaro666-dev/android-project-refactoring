@@ -13,13 +13,14 @@ interface GithubRepository {
 }
 
 @Singleton
-class GithubRepositoryImpl @Inject constructor(private val githubApiClient: GithubApiClient) :
-    GithubRepository {
+class GithubRepositoryImpl @Inject constructor() : GithubRepository {
+
+    private val _githubApiClient = GithubApiClient()
 
     override suspend fun tryRequestGithubRepositories(searchKeyword: String): HttpResponse {
         return withContext(Dispatchers.IO) {
             try {
-                githubApiClient.getRepositories(searchKeyword)
+                _githubApiClient.getRepositories(searchKeyword)
             } catch (e: Exception) {
                 Log.e("[Exception]tryRequestGithubRepositories", e.toString())
                 throw e
